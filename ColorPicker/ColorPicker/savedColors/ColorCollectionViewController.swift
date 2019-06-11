@@ -112,7 +112,8 @@ extension ColorCollectionViewController: UICollectionViewDelegate, UICollectionV
             return UICollectionViewCell()
         }
         let color = myColors[indexPath.row]
-        cell.configUI(with: color, shouldDelete: shouldDelete(color: color))
+        let model = ColorInfoViewModel(color: color)
+        model.config(cell, shouldDelete: shouldDelete(color: color))
         
         return cell
     }
@@ -167,7 +168,8 @@ extension ColorCollectionViewController: ColorInfoDelegate {
         if let cell = collectionView.cellForItem(at: IndexPath(item: currentColorIndex, section: 0)) as? ColorInfoCell {
             
             let color = myColors[currentColorIndex]
-            cell.configUI(with: color, shouldDelete: shouldDelete(color: color))
+            let model = ColorInfoViewModel(color: color)
+            model.config(cell, shouldDelete: shouldDelete(color: color))
         }
     }
 }

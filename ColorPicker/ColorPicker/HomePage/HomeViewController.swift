@@ -317,7 +317,7 @@ extension HomeViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
         if let color = cvPixelAssistant.getColor(at: center, from: pixelBuffer) {
             self.update(color: color)
         }
-        
+
  /*
         /*Crash Test*/
         let color:UIColor? = nil
