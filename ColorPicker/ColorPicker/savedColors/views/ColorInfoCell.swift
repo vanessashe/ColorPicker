@@ -10,9 +10,9 @@ import UIKit
 
 class ColorInfoCell: UICollectionViewCell {
     
-    @IBOutlet private weak var colorStick: UIView!
-    @IBOutlet private weak var nameLabel: UILabel!
-    @IBOutlet private weak var hexCodeLabel: UILabel!
+    @IBOutlet fileprivate weak var colorStick: UIView!
+    @IBOutlet fileprivate weak var nameLabel: UILabel!
+    @IBOutlet fileprivate weak var hexCodeLabel: UILabel!
     @IBOutlet weak var bgView: UIView!
     @IBOutlet weak var deletingMark: UIView!
     @IBOutlet weak var likeMarkView: UIView!
@@ -26,24 +26,7 @@ class ColorInfoCell: UICollectionViewCell {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
-    
-    
-    func configUI(with myColor: MyColor, shouldDelete: Bool) {
-    
 
-        colorStick.backgroundColor = myColor.color
-        hexCodeLabel.text = myColor.hexCode
-        nameLabel.text = myColor.name
-        
-        if myColor.name != "" {
-            nameLabel.isHidden = false
-        }
-        
-        likeMarkView.isHidden = !myColor.isFavorite
-        deletingMark.isHidden = !shouldDelete
-        adjustNameTextColor()
-        
-    }
     
     func decorate() {
 
@@ -57,24 +40,41 @@ class ColorInfoCell: UICollectionViewCell {
 
         deletingMark.layer.cornerRadius = deletingMark.frame.width/2
         deletingMark.layer.masksToBounds = true
-//        deletingMark.isHidden = true
-        likeMarkView.layer.round(likeMarkView.frame.width/2)
+
+    likeMarkView.layer.round(likeMarkView.frame.width/2)
 
     }
     
-    func adjustNameTextColor() {
+}
+
+class ColorInfoViewModel {
+    var myColor: MyColor
+    
+    init(color:MyColor) {
+        self.myColor = color
+    }
+    
+    func config(_ cell: ColorInfoCell,shouldDelete: Bool) {
         
-        let color = colorStick.backgroundColor
-        if let hsb = color?.utils.hsbValue() {
-            nameLabel.textColor = UIColor.black
-            deletingMark.backgroundColor = 0x424242.utils.asRGB
-            if (hsb.b < 0.6 && hsb.s > 0.55) || hsb.b < 0.5 || (hsb.b < 0.95 && hsb.s > 0.7) {
-                nameLabel.textColor = UIColor.white
-                deletingMark.backgroundColor = UIColor.lightGray
-            }
+        cell.colorStick.backgroundColor = myColor.color
+        cell.hexCodeLabel.text = myColor.hexCode
+        cell.nameLabel.text = myColor.name
+        
+        if myColor.name != "" {
+            cell.nameLabel.isHidden = false
+        }
+        
+        cell.likeMarkView.isHidden = !myColor.isFavorite
+        cell.deletingMark.isHidden = !shouldDelete
+        let hsb = myColor.color.utils.hsbValue()
+        
+        cell.nameLabel.textColor = UIColor.black
+        cell.deletingMark.backgroundColor = 0x424242.utils.asRGB
+        if (hsb.b < 0.6 && hsb.s > 0.55) || hsb.b < 0.5 || (hsb.b < 0.95 && hsb.s > 0.7) {
+            cell.nameLabel.textColor = UIColor.white
+            cell.deletingMark.backgroundColor = UIColor.lightGray
         }
         
     }
-    
 }
 
