@@ -68,6 +68,7 @@ class HomeViewController: UIViewController {
             tools[1].enable(cameraInUse)
         }
     }
+    lazy var colorSetVC = ColorSetsViewController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -235,10 +236,9 @@ class HomeViewController: UIViewController {
             return
         }
         
-        let vc = ColorSetsViewController()
-        vc.modalPresentationStyle = .overFullScreen
-        vc.myColors = colorSet.getList()
-        self.present(vc, animated: true) {}
+        colorSetVC.modalPresentationStyle = .overFullScreen
+        colorSetVC.myColors = colorSet.getList()
+        self.present(colorSetVC, animated: true) {}
     }
     
     @IBAction func selectPicture(_ sender: UIButton) {
@@ -317,12 +317,6 @@ extension HomeViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
         if let color = cvPixelAssistant.getColor(at: center, from: pixelBuffer) {
             self.update(color: color)
         }
-
- /*
-        /*Crash Test*/
-        let color:UIColor? = nil
-        self.update(color: color!)
- */
     }
 }
 

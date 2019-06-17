@@ -60,18 +60,20 @@ class ColorCollectionViewController: UIViewController {
     }
     
     private func configLayout() {
-        guard let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout else {
-            return
-        }
-        let margin:CGFloat = screenWidth * 11.0/375.0
-        collectionView.contentInset = UIEdgeInsets(top: margin, left: margin, bottom: margin, right: margin)
         
-        let w = (screenWidth - 3 * margin)/2
-        let h = max(w * 2/3 - 10,100)
-    
-        layout.itemSize = CGSize(width: w, height: h)
-        layout.minimumInteritemSpacing = margin
-        layout.minimumLineSpacing = margin
+        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            let margin:CGFloat = screenWidth * 11.0/375.0
+            collectionView.contentInset = UIEdgeInsets(top: margin, left: margin, bottom: margin, right: margin)
+            let w = (screenWidth - 3 * margin)/2
+            let h = max(w * 2/3 - 10,100)
+            
+            layout.itemSize = CGSize(width: w, height: h)
+            layout.minimumInteritemSpacing = margin
+            layout.minimumLineSpacing = margin
+
+        }
+        
+        
     }
     
     func preDelete(_ willDelete: Bool) {

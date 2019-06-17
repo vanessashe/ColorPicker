@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import GoogleMobileAds
 class PaletteViewController: UIViewController {
 
     @IBOutlet weak var pageControl: PaletteControl!
@@ -16,10 +16,9 @@ class PaletteViewController: UIViewController {
     @IBOutlet var bgPhotoView: [UIImageView]!
     @IBOutlet weak var likeBtn: UIButton!
     @IBOutlet weak var editBtn: UIButton!
-    
     @IBOutlet weak var colorNameTextField: UITextField!
     weak var colorInfoCellDelegate: ColorInfoDelegate?
-    
+    private var bannerView: GADBannerView!
     let backgroundColor = #colorLiteral(red: 0.9842836261, green: 0.9842377305, blue: 0.9928161502, alpha: 1)
     var myColor: MyColor? {
         didSet {
@@ -34,6 +33,16 @@ class PaletteViewController: UIViewController {
         pageControl.delegate = self
         
         colorNameTextField.delegate = self
+        bannerView = Banner.shared.view
+        bannerView.backgroundColor = UIColor.lightGray
+        bannerView.adUnitID = "ca-app-pub-7222545677691808/3942328525"
+        bannerView.rootViewController = self
+        bannerView.delegate = self
+        addBannerViewToView(bannerView)
+        
+        bannerView.isAutoloadEnabled = true
+
+//        bannerView.load(GADRequest())
     }
 
     override func viewDidLayoutSubviews() {
@@ -46,6 +55,28 @@ class PaletteViewController: UIViewController {
             }
         }
         
+    }
+
+    
+    func addBannerViewToView(_ bannerView: GADBannerView) {
+        bannerView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(bannerView)
+        view.addConstraints(
+            [NSLayoutConstraint(item: bannerView,
+                                attribute: .bottom,
+                                relatedBy: .equal,
+                                toItem: bottomLayoutGuide,
+                                attribute: .top,
+                                multiplier: 1,
+                                constant: 0),
+             NSLayoutConstraint(item: bannerView,
+                                attribute: .centerX,
+                                relatedBy: .equal,
+                                toItem: view,
+                                attribute: .centerX,
+                                multiplier: 1,
+                                constant: 0)
+            ])
     }
     func saveName() {
         colorInfoCellDelegate?.rewrite(name: colorNameTextField.text ?? "")
@@ -126,9 +157,11 @@ class PaletteViewController: UIViewController {
     
     private func resetUIColor() {
         
-        if let myColor = myColor , let colorset = generateColors() {
+        if let myColor = myColor {
             let color = myColor.color
-            pageControl.colorSets = colorset
+            let mid = setIndex(by: color)
+            let colorset = myColor.generateSimilarColors(midIndex: mid)
+                        pageControl.colorSets = colorset
             selected(color: color)
             colorImg(at: 0, with: friend(of: colorset[3]))
             colorImg(at: 1, with: colorset[3])
@@ -138,6 +171,23 @@ class PaletteViewController: UIViewController {
             markAsLiked(likeBtn)
         }
     }
+    
+    private func setIndex(by color: UIColor) -> Int {
+        var midIndex = 2
+        if color.utils.similarBrightness(to: backgroundColor, by: 0.8) {
+            midIndex = 0
+        } else if color.utils.similarBrightness(to: backgroundColor){
+            midIndex = 1
+            
+        } else if color.utils.hsbValue().b < 0.18 {
+            midIndex = 4
+        } else if color.utils.hsbValue().b < 0.30 {
+            midIndex = 3
+        }
+        pageControl.setCurrentpage(to: midIndex)
+        return midIndex
+    }
+    
     
     private func colorImg(at: Int, with color: UIColor) {
         
@@ -158,34 +208,7 @@ class PaletteViewController: UIViewController {
         return friend
     }
 
-    private func generateColors() -> [UIColor]? {
-
-        guard let mid = myColor?.color else {
-            return nil
-        }
-        var set:[UIColor] = []
-        var midIndex = 2
-        
-        if mid.utils.similarBrightness(to: backgroundColor, by: 0.8) {
-            midIndex = 0
-        } else if mid.utils.similarBrightness(to: backgroundColor){
-            midIndex = 1
-            
-        } else if mid.utils.hsbValue().b < 0.18 {
-            midIndex = 4
-        } else if mid.utils.hsbValue().b < 0.30 {
-            midIndex = 3
-        }
-        pageControl.setCurrentpage(to: midIndex)
-        
-        for index in 0...4 {
-            
-            let i = CGFloat(index - midIndex) * -1
-            let color = mid.utils.adjust(by: (h:  i, s: i * -13, b: i * 7))
-            set.append(color)
-        }
-        return set
-    }
+    
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
@@ -206,6 +229,38 @@ extension PaletteViewController: UITextFieldDelegate {
         saveName()
         return true
     }
-    
-    
 }
+
+extension PaletteViewController: GADBannerViewDelegate {
+
+    func adViewDidReceiveAd(_ bannerView: GADBannerView) {
+        print("did receive Ad")
+        
+        
+    }
+    func adView(_ bannerView: GADBannerView,
+                didFailToReceiveAdWithError error: GADRequestError) {
+        print("adView:didFailToReceiveAdWithError: \(error.localizedDescription)")
+        
+    }
+
+    func adViewWillPresentScreen(_ bannerView: GADBannerView) {
+        print("adViewWillPresentScreen")
+    }
+
+    func adViewWillDismissScreen(_ bannerView: GADBannerView) {
+        print("adViewWillDismissScreen")
+
+    }
+
+    func adViewDidDismissScreen(_ bannerView: GADBannerView) {
+        print("adViewDidDismissScreen")
+
+    }
+
+    func adViewWillLeaveApplication(_ bannerView: GADBannerView) {
+        print("adViewWillLeaveApplication")
+    }
+
+}
+

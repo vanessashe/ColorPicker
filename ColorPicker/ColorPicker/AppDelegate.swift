@@ -7,8 +7,8 @@
 //
 
 import UIKit
-let screenWidth = UIScreen.main.bounds.width
-let screenHeight = UIScreen.main.bounds.height
+//import Firebase
+import GoogleMobileAds
 
 @UIApplicationMain
 
@@ -18,6 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //    static let colorNames = ColorName()
     static let colorSet = ColorSet.shared
     
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         
@@ -25,7 +26,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window = UIWindow(frame: UIScreen.main.bounds)
         self.window?.rootViewController = home
         self.window?.makeKeyAndVisible()
+//        FirebaseApp.configure()
+        GADMobileAds.sharedInstance().start(completionHandler: nil)
         
+
         
         return true
     }

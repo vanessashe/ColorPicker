@@ -41,5 +41,19 @@ class MyColor: NSObject, NSCoding {
         self.hexCode = hexCode
         self.date = Date()
     }
+    
+    func generateSimilarColors(midIndex: Int) -> [UIColor] {
+        
+        var set:[UIColor] = []
+        
+        for index in 0...4 {
+            
+            let i = CGFloat(index - midIndex) * -1
+            let c = color.utils.adjust(by: (h:  i, s: i * -13, b: i * 7))
+            set.append(c)
+        }
+        return set
+    }
+    
 }
 

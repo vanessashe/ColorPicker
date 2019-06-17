@@ -20,12 +20,11 @@ class BounceScaleBtn:UIButton {
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesCancelled(touches, with: event)
         convert(to: 1)
-        print("cancelled")
+        
     }
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
         convert(to: 1)
-        print("ended")
     }
 
     private func convert(to: CGFloat) {
