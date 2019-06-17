@@ -9,7 +9,7 @@
 import UIKit
 
 class PixelBufferTool {
-    
+    let fixedPhotoRatio:CGFloat = 9.0/16.0
     func getColor(at point: CGPoint ,from pixelBuffer: CVPixelBuffer) -> UIColor? {
         
         CVPixelBufferLockBaseAddress(pixelBuffer, [])
@@ -46,7 +46,7 @@ class PixelBufferTool {
         let p = CGPoint(x: point.y, y: screenWidth - point.x)
         let scale:CGFloat = CGFloat(width)/screenHeight
         let x = Int(p.x * scale)
-        let yOffset:CGFloat = (screenHeight * (9.0/16.0) - screenWidth)/2
+        let yOffset:CGFloat = (screenHeight * fixedPhotoRatio - screenWidth)/2
         
         let y = Int((p.y + yOffset) * scale)
         let lumaIndex = x+y*lumaBytesPerRow

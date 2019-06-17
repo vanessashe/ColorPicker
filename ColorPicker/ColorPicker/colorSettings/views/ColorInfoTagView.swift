@@ -35,16 +35,18 @@ class ColorInfoTagView: UIView {
     
     @IBAction func copyValue(_ sender: UIButton) {
         if let tagText = tagLabel.text, let value = valueLabel.text {
-        UIPasteboard.general.string = "\(tagText):  \(value)"
+            UIPasteboard.general.string = "\(tagText):  \(value)"
         }
-    
-        UIView.animate(withDuration: 0.2, delay: 0.2, options: .curveLinear, animations: {
-            self.copiedView.alpha = 1
-        }, completion: nil)
         
-        UIView.animate(withDuration: 0.2, delay: 0.4, options: .curveLinear, animations: {
-            self.copiedView.alpha = 0
-        }, completion: nil)
+        let cpViewLayer = copiedView.layer
+        let anim = CABasicAnimation(keyPath: "opacity")
+        anim.toValue = 1
+        anim.byValue = 0.5
+        anim.fillMode = .forwards
+        anim.duration = 0.5
+        anim.beginTime = CACurrentMediaTime() + 0.2
+        cpViewLayer.add(anim, forKey: "showCopied")
+        
     
     }
     
