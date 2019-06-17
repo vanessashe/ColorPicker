@@ -29,6 +29,7 @@ class HomeViewController: UIViewController {
     let swipeUp = UISwipeGestureRecognizer()
     let swipeDown = UISwipeGestureRecognizer()
     let captureController = CaptureController()
+    lazy var colorSetVC = ColorSetsViewController()
     var lastChosen: MyControl?
     let imagePicker = UIImagePickerController()
     let detailViewer = DetailViewer(frame: CGRect(x: 0, y: 0, width: 25, height: 25))
@@ -235,10 +236,9 @@ class HomeViewController: UIViewController {
             return
         }
         
-        let vc = ColorSetsViewController()
-        vc.modalPresentationStyle = .overFullScreen
-        vc.myColors = colorSet.getList()
-        self.present(vc, animated: true) {}
+        colorSetVC.modalPresentationStyle = .overFullScreen
+        colorSetVC.myColors = colorSet.getList()
+        self.present(colorSetVC, animated: true) {}
     }
     
     @IBAction func selectPicture(_ sender: UIButton) {

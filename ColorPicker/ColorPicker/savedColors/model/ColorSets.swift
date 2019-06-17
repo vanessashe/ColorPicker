@@ -13,7 +13,7 @@ class ColorSet {
     private let colorSetSavingKey = "colorSetSavingKey"
     private var myColors:[MyColor] = []
 //    private var colorDict:[String:String] = [:]
-    init() {
+    private init() {
         
         if let data = UserDefaults.standard.data(forKey: colorSetSavingKey), let colors = NSKeyedUnarchiver.unarchiveObject(with: data) as? [MyColor] {
             myColors = colors

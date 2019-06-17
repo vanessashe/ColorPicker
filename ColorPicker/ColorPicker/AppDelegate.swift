@@ -7,15 +7,11 @@
 //
 
 import UIKit
-//let screenWidth = UIScreen.main.bounds.width
-//let screenHeight = UIScreen.main.bounds.height
-//
 @UIApplicationMain
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-//    static let colorNames = ColorName()
     static let colorSet = ColorSet.shared
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
