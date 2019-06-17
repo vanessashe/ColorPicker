@@ -1,0 +1,8 @@
+
+platform :ios, '9.0'
+use_frameworks!
+target 'ColorPicker' do
+	pod 'Firebase/Analytics'
+	pod 'Firebase/AdMob'
+ 
+end
